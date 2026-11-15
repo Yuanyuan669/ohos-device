@@ -1,8 +1,12 @@
-# 固件 / OTA / 备份：体积大、含版权或设备唯一数据，不入库
+# 固件 / OTA / 备份 / 本地工具：体积大、含版权或设备唯一数据，不入库
 firmware/
 images/
 ota/
 backups/
+tools/
+closed-source/
+local/
+sdk/
 *.img
 *.pac
 *.bin
