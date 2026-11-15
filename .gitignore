@@ -1,0 +1,46 @@
+# 固件 / OTA / 备份：体积大、含版权或设备唯一数据，不入库
+firmware/
+images/
+ota/
+backups/
+*.img
+*.pac
+*.bin
+*.mbn
+*.elf
+*.zip
+*.tar.gz
+*.vhdx
+
+# 签名材料
+*.p12
+*.cer
+*.p7b
+*.pfx
+*.jks
+signing/*.pem
+!signing/README.md
+
+# 本地私有信息（序列号/MAC/IP、厂商内部资料等）
+*.local.md
+*.local.json
+manifest.txt
+SHA256SUMS.txt
+.env
+.env.*
+
+# OpenHarmony 源码/构建产物（将来叠加 BSP 后使用）
+out/
+build/
+prebuilts/
+node_modules/
+.hvigor/
+.idea/
+__pycache__/
+*.pyc
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
