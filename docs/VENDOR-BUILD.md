@@ -195,8 +195,11 @@ out/laphone/packages/phone/images/laphone_nosec_userdebug.tar.gz
 
 厂商文档：
 
-1. 下载烧录工具（百度网盘，提取码见原文）：
+1. 下载烧录工具（百度网盘）：
    `https://pan.baidu.com/s/1UniJM5Z6F-8TOUIHR-Cd9g`，提取码 `f3uq`
+   - 2026-11-15 验证：链接有效、提取码正确；包内应有 `DriverSetup.exe`、`UpgradeDownload.exe`。
+   - 页面摘要里另一个 `1drJz1MgYyZVgBC7L78i-Ew` / `84h6` 已失效（“链接不存在”），不要用。
+   - 百度网盘需要登录/客户端，命令行无法直接拉取；下载后放到本仓 `tools/`（已被 Git 忽略）。
 2. 按系统类型进入目录，双击 `DriverSetup.exe` 装驱动；
 3. 双击 `UpgradeDownload.exe`；
 4. 手机**关机、不插线**；点工具栏开始；同时按住**音量加 + 电源**，插入数据线；
