@@ -29,6 +29,7 @@
 - [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md)：本机已有工具、缺项清单、WSL/双系统选择
 - [docs/FIRMWARE.md](docs/FIRMWARE.md)：系统构建/OTA/刷机/备份的可行路径、厂商询问模板、风险
 - [docs/VENDOR-BUILD.md](docs/VENDOR-BUILD.md)：厂商 4.0 源码编译步骤、闭源文件清单、PAC 烧录
+- [docs/IMAGES.md](docs/IMAGES.md)：官方 4.0/4.1/5.0 与社区 6.1 LTS 镜像汇总（含回滚包）
 - [docs/REMOTE-BUILD.md](docs/REMOTE-BUILD.md)：用 8840U 32 GB 掌机做 Linux 构建机（SSH/SCP/性能）
 - [docs/LOCAL-FILES.md](docs/LOCAL-FILES.md)：固件/OTA/工具/闭源文件放哪（全部不入库）
 - kiosk 仓：`docs/TOOLCHAIN-NOTES.md`、`docs/PITFALLS.md`（应用侧工具链与上板踩坑）
