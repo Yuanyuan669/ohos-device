@@ -197,7 +197,11 @@ out/laphone/packages/phone/images/laphone_nosec_userdebug.tar.gz
 
 1. 下载烧录工具（百度网盘）：
    `https://pan.baidu.com/s/1UniJM5Z6F-8TOUIHR-Cd9g`，提取码 `f3uq`
-   - 2026-11-15 验证：链接有效、提取码正确；包内应有 `DriverSetup.exe`、`UpgradeDownload.exe`。
+   - 2026-11-15 验证：链接有效、提取码正确；实际包内是
+     `34564__UpgradeDownload_R25.21.1401.7z`（烧录工具）和 `Driver_R4.20.1601.zip`（USB 驱动）。
+   - **这个链接只有工具/驱动，不含固件**；它不是 OpenHarmony 4.0 Release，也不对应某个 API。
+     `R25.21.1401` 是工具版本，和 OpenHarmony 版本无关。
+   - 4.0 固件是源码编译产出的 `laphone_nosec_userdebug.pac`；设备当前 4.1.7.5 则是厂商 OTA/完整包。
    - 页面摘要里另一个 `1drJz1MgYyZVgBC7L78i-Ew` / `84h6` 已失效（“链接不存在”），不要用。
    - 百度网盘需要登录/客户端，命令行无法直接拉取；下载后放到本仓 `tools/`（已被 Git 忽略）。
 2. 按系统类型进入目录，双击 `DriverSetup.exe` 装驱动；
