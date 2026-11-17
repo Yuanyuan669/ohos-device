@@ -214,3 +214,5 @@
 - **2026-11-17 快传 M4/M5**：PIN 连续 5 次错误锁定 60s（`cb3952a`）；上传改为流式落盘、8GB 上限（`bfde246`），100MB 往返 SHA256 一致。HEVC 黑屏暂缓，转浏览器/应用中心。
 
 - **2026-11-17 HEVC 结案**：`codec_caps.xml` 仅注册 h264/h263/mpeg2/mpeg4，无 HEVC 解码器与库，LHT16 系统镜像不支持 HEVC，应用层不可修；M0 的 HEVC OK 为误判（已更正）。
+
+- **2026-11-17 HEVC 软解原型**：libde265 静态库 + 自带 MP4 解复用 + PixelMap 渲染，320x240/25fps 出画，渲染约 12.8fps（`42532a3`）；文档见 `ohos-media/docs/HEVC-SOFTDECODE.md`。后续若产品化需 XComponent+EGL 原生渲染提升帧率。
