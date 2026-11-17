@@ -200,3 +200,9 @@
 - **Picker**：UI 能打开，但测试机 Documents/Download 显示 0 项（外部拷入不索引），picker→fd 仍需人工点一次验证。
 - 结论：Phase 2 进入 M1（媒体库/导入复制）与 M2（音频播放器 UI+后台恢复），视频全屏放 M3。
 - 详见 `docs/research/VERIFY-MEDIA-M0.md`。
+## 12. 代码仓库（2026-11-17）
+
+- 快传：https://github.com/Yuanyuan669/ohos-transfer （main `8947274`）
+- 媒体：https://github.com/Yuanyuan669/ohos-media （main `e3c294f`）
+- 浏览器 / 应用中心：目录已预建（`D:\ohos-browser`、`D:\ohos-appcenter`），GitHub 空仓库待推。
+- 说明：两个仓库都保留了 GitHub 模板的 `LICENSE`（Initial commit），本地 `main` 已 rebase 并跟踪 origin。
