@@ -218,3 +218,5 @@
 - **2026-11-17 HEVC 软解原型**：libde265 静态库 + 自带 MP4 解复用 + PixelMap 渲染，320x240/25fps 出画，渲染约 12.8fps（`42532a3`）；文档见 `ohos-media/docs/HEVC-SOFTDECODE.md`。后续若产品化需 XComponent+EGL 原生渲染提升帧率。
 
 - **2026-11-17 Phase3 浏览器 M0**：`com.local.browser` 空壳 + Web 本地主页 + 地址栏/偏好；实测本地 45ms、example 226ms、Bing 228ms，PSS ~108MiB；自定义 UA 生效。commit `e8efc33`（本地，GitHub 仓库未建）。坑：ArkTS 无正则字面量、Web 回调对象类型需接口、rawfile 的 `resource://` 不能写进地址/偏好。
+
+- **2026-11-17 浏览器 M1**：前进/后退/刷新/停止/主页、URL 规范化、错误覆盖层（-105 实测）、`aa start --ps url` 外部拉起；后退 13ms、前进 1ms、刷新 219ms。坑：字形缺失改中文按钮、startUrl 与 rawfile 竞态。commit（本地）。
