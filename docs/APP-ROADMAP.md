@@ -206,3 +206,5 @@
 - 媒体：https://github.com/Yuanyuan669/ohos-media （main `e3c294f`）
 - 浏览器 / 应用中心：目录已预建（`D:\ohos-browser`、`D:\ohos-appcenter`），GitHub 空仓库待推。
 - 说明：两个仓库都保留了 GitHub 模板的 `LICENSE`（Initial commit），本地 `main` 已 rebase 并跟踪 origin。
+
+- **2026-11-17 M2 完成**：音频播放器（音频列表、播放/暂停/seek、上下曲、播完自动下一首、后台播放），提交 `fca73b1`；修复 fdSrc 异步 initialized 导致的 5400102。
