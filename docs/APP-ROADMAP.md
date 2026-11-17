@@ -222,3 +222,12 @@
 - **2026-11-17 浏览器 M1**：前进/后退/刷新/停止/主页、URL 规范化、错误覆盖层（-105 实测）、`aa start --ps url` 外部拉起；后退 13ms、前进 1ms、刷新 219ms。坑：字形缺失改中文按钮、startUrl 与 rawfile 竞态。commit（本地）。
 
 - **2026-11-17 浏览器 M2**：3 标签上限/新建关闭切换、切标签销毁 Web、tabs+active 会话恢复；实测切换直载 379ms、重启恢复 2 标签。RSS 不降（Web 引擎缓存，API11 无 purge），记录为限制。
+
+
+## Phase 5：远程控制（ohos-remote，PC 侧）
+
+- 依据：`docs/research/APP-CAST-REMOTE.md`。投屏（Miracast/AirPlay）受 `CAPTURE_SCREEN=system_core` 与无 WFD 组件限制，第三方不可行；PC 侧 hdc 远控可行。
+- 范围：设备发现（USB/TCP）、`snapshot_display` 画面（约 2~3 fps）、`uinput/uitest` 注入、文件 push/pull、shell/日志、常用按键。
+- 里程碑：M0 hdc 封装+设备列表（0.5d）；M1 画面循环+缩放（1d）；M2 输入映射（1d）；M3 文件/应用/shell（1d）；M4 无线+打包（0.5~1d）。
+- 非目标：音频、30fps 视频、系统级投屏。
+- 可选后备：DLNA 媒体推送小工具（2~3d，价值有限）。
