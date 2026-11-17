@@ -216,3 +216,5 @@
 - **2026-11-17 HEVC 结案**：`codec_caps.xml` 仅注册 h264/h263/mpeg2/mpeg4，无 HEVC 解码器与库，LHT16 系统镜像不支持 HEVC，应用层不可修；M0 的 HEVC OK 为误判（已更正）。
 
 - **2026-11-17 HEVC 软解原型**：libde265 静态库 + 自带 MP4 解复用 + PixelMap 渲染，320x240/25fps 出画，渲染约 12.8fps（`42532a3`）；文档见 `ohos-media/docs/HEVC-SOFTDECODE.md`。后续若产品化需 XComponent+EGL 原生渲染提升帧率。
+
+- **2026-11-17 Phase3 浏览器 M0**：`com.local.browser` 空壳 + Web 本地主页 + 地址栏/偏好；实测本地 45ms、example 226ms、Bing 228ms，PSS ~108MiB；自定义 UA 生效。commit `e8efc33`（本地，GitHub 仓库未建）。坑：ArkTS 无正则字面量、Web 回调对象类型需接口、rawfile 的 `resource://` 不能写进地址/偏好。
