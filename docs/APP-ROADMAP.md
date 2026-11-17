@@ -46,10 +46,10 @@
 | P0-4 | `request.agent`（BACKGROUND）下载 10 MB：进度/暂停/后台不中断回调 | 应用中心 M0 | 大文件退回 `downloadFile`，文案去掉"后台下载" |
 | P0-5 | `cryptoFramework` 验 ECDSA P-256 的算法字符串 | 应用中心 M0 | 索引验签降级为 Phase 4 之后 |
 | P0-6 | `zlib` 解压签名 HAP 能读到 `module.json`（签名块在 ZIP 末尾） | 应用中心 M0 | 放弃本地解包校验，只做 SHA256 |
-| P0-7 | `READ_MEDIA`+`mediaLibrary` 能否列音频/视频并拿 fd（模块已废弃） | 媒体 M0 | 默认走 picker 导入沙箱 |
-| P0-8 | picker URI→`fs.openSync(READ_ONLY)`→fd→`AVPlayer.fdSrc`；**不可**把 URI 赋给 `url` | 媒体 M0 | 无替代，必须成立 |
-| P0-9 | AVSession+`audioPlayback` 退后台 30 分钟不断；假申请会被终止进程 | 媒体 M0 | 音乐不做后台承诺 |
-| P0-10 | 格式矩阵：FLAC/Opus/WebM(VP8/VP9)/MP4 H.264/MKV/TS/HEVC/4K 逐项实测 | 媒体 M0 | 白名单收缩，HEVC 直接友好报错 |
+| P0-7 | `READ_MEDIA`+`mediaLibrary` 能否列音频/视频并拿 fd（模块已废弃） | 媒体 M0 | 默认走 picker 导入沙箱<br>【已验证 2026-11-17（相关）：picker 导入路径在 `com.local.media` 上不通（URI→fd=13900001），`READ_MEDIA`+`mediaLibrary` 本身仍未测，见 `research/VERIFY-MEDIA-M0.md`】 |
+| P0-8 | picker URI→`fs.openSync(READ_ONLY)`→fd→`AVPlayer.fdSrc`；**不可**把 URI 赋给 `url` | 媒体 M0 | 无替代，必须成立<br>【已验证 2026-11-17：**前半段不成立**。picker 返回 `file://docs/storage/Users/currentUser/Download/x.mp3`，`fs.openSync` 13900001 EPERM、`copyFileSync` 13900002；后半段确认：URI 给 `AVPlayer.url` 报 401"not fd:// or network address"。改用 hdc 推送 + chown/660 进 `filesDir/media` 后 fdSrc 正常】 |
+| P0-9 | AVSession+`audioPlayback` 退后台 30 分钟不断；假申请会被终止进程 | 媒体 M0 | 音乐不做后台承诺<br>【已验证 2026-11-17：普通签名包 + `KEEP_BACKGROUND_RUNNING`（system_grant 静默授予）+ `AVSession.activate` + `startBackgroundRunning(AUDIO_PLAYBACK)`，切到「笔记」后 ≥76 s `pid` 不变、`state=playing`、position 持续（0↔5000 循环）；系统出了媒体通知。30 分钟与"假申请杀进程"未测】 |
+| P0-10 | 格式矩阵：FLAC/Opus/WebM(VP8/VP9)/MP4 H.264/MKV/TS/HEVC/4K 逐项实测 | 媒体 M0 | 白名单收缩，HEVC 直接友好报错<br>【已验证 2026-11-17：flac/m4a/mp3/ogg/opus/wav + h264 的 mkv/mp4/ts + **hevc mp4** 共 10/10 `fdSrc` prepare+play 成功、duration 正确；视频须先给 `surfaceId`。WebM(VP8/VP9)、4K、长时压测未测】 |
 | P0-11 | 80 端口 `listen` 的失败错误码与耗时（预期 201/2303199） | 传输 M0 #3 | 仅记录，不影响 8080 主方案 |
 | P0-12 | 熄屏/切后台后 PC 请求多久失败、恢复后端口是否仍在 | 传输 M0 #2 | 决定超时阈值与"假在线"文案 |
 | P0-13 | `setWindowKeepScreenOn(true)` 生效且退页恢复 | 传输 M0 #6 | 传输期改用引导文案 |
@@ -191,3 +191,12 @@
 | AVSession 可做系统播控 | 公开 SDK 只有 provider；全局 controller 必须是系统应用 |
 | `AudioViewPicker`"audioPicker 在规划中" | 官方措辞为"当前实际弹出 documentPicker 页面" |
 | picker URI "Web 直接读取即可"（通用） | `select` 只读、不可持久化（`FILE_ACCESS_PERSIST` 为 system_basic+ACL） |
+## 11. Phase 2 M0 实测（2026-11-17）
+
+- 工程：`D:\ohos-media`（`com.local.media`），AVPlayer + `fdSrc` + XComponent surface。
+- **格式矩阵 10/10 通过**：FLAC/M4A/MP3/OGG(Vorbis)/OPUS/WAV/MKV(H.264)/MP4(H.264)/TS(H.264)/**HEVC(320x240)**。
+  HEVC 小分辨率可播，风险收缩到 4K/10bit/大码率；不是容器格式问题。
+- **后台播放**：AVSession + `audioPlayback` 后切到笔记，98 s 内 position 持续增长、`state=playing bg=yes`、进程存活（无 AVSession 时约 1.1 s 被暂停）。
+- **Picker**：UI 能打开，但测试机 Documents/Download 显示 0 项（外部拷入不索引），picker→fd 仍需人工点一次验证。
+- 结论：Phase 2 进入 M1（媒体库/导入复制）与 M2（音频播放器 UI+后台恢复），视频全屏放 M3。
+- 详见 `docs/research/VERIFY-MEDIA-M0.md`。
