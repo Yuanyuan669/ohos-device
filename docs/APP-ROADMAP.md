@@ -60,6 +60,12 @@
 
 **第一件事：先交付 C（`hdc` 兜底脚本，0.5~1 人日）拿到"今天就能传"的基线，同时并行 A 的 P0-11~P0-13 三项。** 理由：C 零 App 开发、零端口、零局域网暴露，且已有 `push-photos.sh` 先例（root 写沙箱 + chown/660 + 失败退 `/data/local/tmp`）。
 
+> **2026-11-17 进展（MVP 已落地）**：`D:\ohos-transfer`（bundle `com.local.transfer`，commit `b9aa390`）。
+> 已实现并实测：自动监听 `0.0.0.0:8080` + 6 位 PIN；PC 浏览器（同网段 192.168.31.x）打开页面拖拽上传/列表/下载；
+> 5 MB 中文名上传→下载 SHA256 一致；错误 PIN 返回 401；退出（terminateSelf）后端口释放；切后台 45 s 端口与进程仍存活。
+> `scripts/transfer.sh` 的 hdc `push/list/pull` 已实测（含 chown 660）。
+> 剩余：M3 picker 导入联调、M4 限速/锁定/空闲停、M5 大文件与 Wi-Fi 抖动；GitHub 仓库待建后推送。
+
 | 里程碑 | 内容 | 人日 | 验收 |
 | --- | --- | --- | --- |
 | M0 | 6 条空壳验证（8080/PC curl/80 失败/picker 读写/批量存/FOLDER/keep-screen-on） | 0.5 | 6 条有记录，失败项有替代方案 |
