@@ -102,8 +102,9 @@ OH_AVScreenCapture_ReleaseVideoBuffer(capture);
 
 ### 软件 x264 方案
 - 交叉编译 x264 静态库（`--target=aarch64-linux-ohos`），`ultrafast` + `zerolatency`，profile baseline，输入 I420，输出 Annex-B。
-- 编码分辨率 **540x1204**（源 1080x2408 下采样），目标 2 Mbps。
-- RGBA→I420 在采集回调里完成；x264 单线程/2 线程。
+- 默认编码分辨率 **540x1204**（源 1080x2408 下采样），2 Mbps；已参数化为 `540p` / `360p` / `180p` 或 `WxH@kbps`。
+- RGBA→I420 在采集回调里完成；x264 2 线程。
+- 档位实测（2026-11-18）：540p 约 22fps/2Mbps；360p 约 20fps/1.2Mbps；180p（180x402）约 20.5fps/600kbps。**降分辨率没有提高 fps**，瓶颈是 AVScreenCapture 回调/合成，不是缩放或 x264；NEON 缩放对刷新率收益有限。
 
 ### 关键坑：stride
 - `OH_NativeBuffer_Config.stride` 报 **4352**，但实际行宽是 **1080*4 = 4320**。
@@ -119,9 +120,10 @@ OH_AVScreenCapture_ReleaseVideoBuffer(capture);
 
 ### 下一步
 1. PC 客户端接 `tcp://<设备IP>:8766`，用 FFmpeg/PyAV 解码显示，替换现有 2fps `snapshot_display` 画面。
-2. 接入 `uinput` 输入（现有 ohos-remote agent 已有），形成 20fps 远控。
+2. 输入已切到 agent 常驻虚拟触摸屏（TCP 8767），端到端远控已打通。
 3. 若要浏览器端：把 NAL 转 WebSocket + MSE/WebCodecs；或封装 fMP4。
 4. 硬件 H264 编码器需要改 `codec_caps.xml`/注册 OMX 组件（ROM 级）后才可用；当前软编已满足 20fps。
+5. 刷新率继续提升需查 AVScreenCapture 出帧节奏（当前约 20fps）和每帧 RGBA map/memcpy，而不是优先做 NEON 缩放。
 
 ## 风险
 
