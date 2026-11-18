@@ -237,3 +237,5 @@
 - **2026-11-17 ohos-remote MVP**：`D:\ohos-remote`，Python/Tkinter + hdc；设备发现、`snapshot_display` 实时画面（2.0 fps，1080x2408）、点击/拖拽/文本、文件上传、装 HAP、Shell、无线 tconn。无音频；依赖 uitest；本机验证画面与上传通过。commit（本地 `f5e03a7`，GitHub 仓库待建）。
 
 - **2026-11-18 ohos-remote 打磨**：返回/主页键码实测（2/1，uinput）；PyInstaller 打包 30MB exe 可用（2.1fps）；agent 一键启动脚本。中文输入/TLS/开机自启仍待办。
+
+- **2026-11-18 system_core 自签 PoC**：独立 bundle com.local.screentest 将 profile 改为 pl=system_core / pp-feature=hos_system_app 后安装成功，isSystemApp=true；AVScreenCapture Native API 实测 1080x2408 @ 20.9~21.1fps（有动画），详见 docs/research/AVSCREEN-CAPTURE-POC.md。H264 编码/推流为下一步。

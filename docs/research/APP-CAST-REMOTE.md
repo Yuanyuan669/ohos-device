@@ -6,22 +6,23 @@
 
 | 方向 | 可行性 | 说明 |
 | --- | --- | --- |
-| 设备画面投到电视（Miracast/AirPlay/Cast） | **不可行（第三方）** | 屏幕采集是系统权限；无 WFD/HDCP 组件 |
+| 设备画面投到电视（Miracast/AirPlay/Cast） | **协议仍不可行；系统级采集已自签跑通** | 无 WFD/HDCP 组件；但本机可用 system_core 自签 HAP 调 AVScreenCapture（2026-11-18 PoC） |
 | DLNA 媒体推送（仅音视频 URL） | 可行（小工具） | 应用层 SSDP + HTTP，不需要采集屏 |
 | PC 远程查看+控制本机 | **可行** | 走 hdc：`snapshot_display` 截图 + `uinput/uitest` 注入，root/debuggable 即可 |
-| 设备端系统级投屏 App（开源方案） | 不适用 | 现有项目要 Full SDK/系统签名或 OH 5.0+ |
+| 设备端系统级投屏 App（开源方案） | **本机可自签 system_core** | 现有开源项目要 Full SDK/系统签名；本机 test PKI 接受 system_core 自签（见 AVSCREEN-CAPTURE-POC.md） |
 
 ## 关键证据
 
-- `CAPTURE_SCREEN` 权限：SDK 权限表里 `availableLevel = system_core`（system_grant），普通 test-CA 应用无法申请。
-- API 11 公共 SDK 无 `@ohos.screenCapture` / `AVScreenCapture`；只有 `@ohos.screenLock`。
+- `CAPTURE_SCREEN` 权限：SDK 权限表里 `availableLevel = system_core`（system_grant）。普通 normal APL 不行，但本机可把 profile 改成 `system_core` + `hos_system_app` 自签，安装后 `isSystemApp=true` 并自动授予。
+- API 11 公共 ArkTS SDK 无 `AVScreenCapture`；但 **Native C API** 存在（`libnative_avscreen_capture.so`），system_core HAP 可直接调用。
+- 2026-11-18 PoC：AVScreenCapture RGBA 1080x2408 实测 **20.9~21.1 fps**（有动画时；静态页约 2.3fps，按脏区出帧），详见 `AVSCREEN-CAPTURE-POC.md`。
 - 设备存在 `/bin/snapshot_display`、`/bin/uinput`、`/bin/uitest`，hdc shell 为 root。
 - 快照性能（1080x2408 JPEG）：
   - 10 张设备内耗时 3.23s（约 3.1 fps），单张 87KB，`hdc file recv` 57ms → 含传输约 2.6 fps。
   - 540x1200 单张 30KB，5 张 1.91s（约 2.6 fps），缩小分辨率不提速（编码/管线开销为主）。
 - 输入注入：`uitest uiInput tap/swipe/inputText` 已在自动化和本机控制中反复验证；`uinput` 支持 `-M` 鼠标、`-K` 键盘、`-T` 触摸。
 - 无线：hdc 支持 TCP 模式（现有 `scripts/tcp-mode.sh`），可脱离 USB 远控。
-- 硬件编码：`/vendor/lib64/libomx_avcenc_hw_sprd.z.so` 存在（H264 硬编），但公共 SDK 没有屏幕采集源，暂时用不上。
+- 硬件编码：`/vendor/lib64/libomx_avcenc_hw_sprd.z.so` 存在（H264 硬编）；采集源已跑通，下一步接 MediaCodec/AVCodec 推流。
 
 ## 开源项目对比
 
@@ -34,7 +35,7 @@
 | snowlyg/ohscrcpy | 7 | Windows 工作台，HDC/ADB，内测 | 参考交互；未知 4.1 支持 |
 | MiracleCast / uxplay | — | Linux Miracast / AirPlay 接收端 | 不能作为 OH 发送端 |
 
-结论：现有开源方案大多依赖系统签名或 OH5+；本机可走“**PC 侧 hdc 客户端**”这条空档。
+结论：现有开源方案大多依赖系统签名或 OH5+；本机除“PC 侧 hdc 客户端”外，也可走 **system_core 自签 + AVScreenCapture + H264** 的低延迟路线（权限已打通）。
 
 ## 推荐项目：ohos-remote（PC 侧远程控制）
 
