@@ -9,7 +9,9 @@
 3. 声明 `ohos.permission.CAPTURE_SCREEN` 后自动获得（system_grant）；
 4. 原生 AVScreenCapture 在 1080x2408 RGBA 下实测 **20.9~21.1 fps**（有持续动画时），远高于 `snapshot_display` 的 ~2 fps。
 
-也就是说：**系统级抓屏这条路走通了**；剩下的是 H264 编码/推流实现，而不是权限。
+5. H264 编码/推流也已跑通：x264 软编 540x1204，TCP 8766 推 Annex-B，PC ffmpeg 解码约 **20fps**。
+
+也就是说：**系统级抓屏 + H264 推流这条路走通了**；剩下的是客户端/输入集成，而不是权限。
 
 ## PoC 工程
 
@@ -87,16 +89,39 @@ OH_AVScreenCapture_ReleaseVideoBuffer(capture);
 | 页面静态 | ~2.3 fps（只在 UI 脏区更新时出帧） |
 | 页面有 `LoadingProgress` 动画 | **20.9~21.1 fps**，1080x2408，stride 4352，format 12 |
 | `snapshot_display` 对照 | 400~450ms/帧，约 2.2 fps |
-| 编码流模式 | `dataType=OH_ENCODED_STREAM` + `videoSource=OH_VIDEO_SOURCE_SURFACE_ES` 时 `Init` 返回 2；暂未走通 |
+| 编码流模式 | `dataType=OH_ENCODED_STREAM` + `videoSource=OH_VIDEO_SOURCE_SURFACE_ES` 时 `Init` 返回 2；未走通 |
 
 结论：AVScreenCapture 是**按合成/脏区出帧**的，不是固定 60fps；静止画面帧率低是正常现象，连续动画/视频时约 21fps。
 
-## 下一步（H264 推流）
+## H264 推流（2026-11-18 已跑通）
 
-1. 设备有 `libomx_avcenc_hw_sprd.z.so`（硬件 AVC 编码器），但 `codec_caps.xml` 只列了解码器；可通过 MediaCodec/AVCodec native API 创建 `video/avc` 编码器验证。
-2. 直接用 RGBA NativeBuffer 喂硬件编码器（避免 CPU 转码），输出 H264 Annex-B / AVCC。
-3. 通过 WebSocket 二进制帧推 NAL；客户端用 WebCodecs/TinyDecoder 解码；带宽约 2~8 Mbps。
-4. 若 `OH_ENCODED_STREAM` 能走通则更省事，需要进一步确认 `videoSource`/buffer 布局；当前版本返回 2。
+### 硬件编码器不可用
+- `codec_caps.xml` 只有 MPEG4 编码器（`avenc_mpeg4`），没有 H264 encoder。
+- `OH_AVCodec_GetCapability("video/avc", true)` 返回 null；`OH_VideoEncoder_CreateByName()` 尝试 `OMX.sprd.h264.encoder` 等 7 个名字全部 null。
+- 设备虽然有 `/vendor/lib64/libomx_avcenc_hw_sprd.z.so`，但它没有注册进 AVCodec/OMX 组件表，应用层拿不到。
+
+### 软件 x264 方案
+- 交叉编译 x264 静态库（`--target=aarch64-linux-ohos`），`ultrafast` + `zerolatency`，profile baseline，输入 I420，输出 Annex-B。
+- 编码分辨率 **540x1204**（源 1080x2408 下采样），目标 2 Mbps。
+- RGBA→I420 在采集回调里完成；x264 单线程/2 线程。
+
+### 关键坑：stride
+- `OH_NativeBuffer_Config.stride` 报 **4352**，但实际行宽是 **1080*4 = 4320**。
+- 按 4352 读会让每行错位 8 像素，画面出现斜向条纹；必须用 `width*4` 作为 RGBA 行跨距。
+
+### 实测
+| 项目 | 结果 |
+| --- | --- |
+| 采集 | 1080x2408，20~21fps |
+| 编码 | 540x1204 H264，16.7~21fps，约 1~2 Mbps |
+| TCP 推流 | 端口 **8766**，Annex-B；PC 4.1s 收到 469KB |
+| 解码验证 | ffmpeg 解码 65 帧/3.25s ≈ 20fps，画面正常 |
+
+### 下一步
+1. PC 客户端接 `tcp://<设备IP>:8766`，用 FFmpeg/PyAV 解码显示，替换现有 2fps `snapshot_display` 画面。
+2. 接入 `uinput` 输入（现有 ohos-remote agent 已有），形成 20fps 远控。
+3. 若要浏览器端：把 NAL 转 WebSocket + MSE/WebCodecs；或封装 fMP4。
+4. 硬件 H264 编码器需要改 `codec_caps.xml`/注册 OMX 组件（ROM 级）后才可用；当前软编已满足 20fps。
 
 ## 风险
 

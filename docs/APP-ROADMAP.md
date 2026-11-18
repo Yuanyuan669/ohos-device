@@ -239,3 +239,4 @@
 - **2026-11-18 ohos-remote 打磨**：返回/主页键码实测（2/1，uinput）；PyInstaller 打包 30MB exe 可用（2.1fps）；agent 一键启动脚本。中文输入/TLS/开机自启仍待办。
 
 - **2026-11-18 system_core 自签 PoC**：独立 bundle com.local.screentest 将 profile 改为 pl=system_core / pp-feature=hos_system_app 后安装成功，isSystemApp=true；AVScreenCapture Native API 实测 1080x2408 @ 20.9~21.1fps（有动画），详见 docs/research/AVSCREEN-CAPTURE-POC.md。H264 编码/推流为下一步。
+- **2026-11-18 H264 推流跑通**：AVCodec 无 H264 编码器（仅 MPEG4）；改用交叉编译 x264 软编 540x1204，TCP 8766 推 Annex-B，PC ffmpeg 实测约 20fps。stride 坑：NativeBuffer 报 4352，实际行宽 4320(=width*4)。
