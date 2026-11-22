@@ -122,7 +122,7 @@ libs/arm64-v8a/libnweb_render.so        876,856 B
 
 ### 2.1 OpenHarmony 官方 ArkWeb / NWeb 能力（以本机 API 11 SDK 的 `.d.ts` 为准）
 
-SDK：`D:\ohos-tools\sdk\openharmony-4.1-Release`（`ets` 4.1.7.5，API 11）。命名空间仍是 `@ohos.web.webview`（`@kit.ArkWeb` 是 API 12 之后的事）。
+SDK：`$OHOS_TOOLS/sdk/openharmony-4.1-Release`（`ets` 4.1.7.5，API 11）。命名空间仍是 `@ohos.web.webview`（`@kit.ArkWeb` 是 API 12 之后的事）。
 
 | 能力 | API 11 状态 | 关键接口 / 说明 |
 | --- | --- | --- |
@@ -191,7 +191,7 @@ SDK：`D:\ohos-tools\sdk\openharmony-4.1-Release`（`ets` 4.1.7.5，API 11）。
 
 ## 4. 推荐方案
 
-**采用方案 B：新写零三方依赖的 ArkTS Stage 浏览器壳**，工程暂定 `D:\ohos-browser`（次日创建，本文件不建工程）。
+**采用方案 B：新写零三方依赖的 ArkTS Stage 浏览器壳**，工程暂定 `ohos-browser`（次日创建，本文件不建工程）。
 
 ### 4.1 架构
 
@@ -375,7 +375,7 @@ OpenHarmony 4.1 官方文档（Gitee，`OpenHarmony-4.1-Release` 分支）：
 ## 附录 A：本次只读探查命令（可复现）
 
 ```powershell
-$hdc = "D:\DevEcoStudio\sdk\default\openharmony\toolchains\hdc.exe"   # Ver 1.3.0a
+$hdc = "$DEVECO_HOME/sdk/default/openharmony/toolchains/hdc.exe"   # Ver 1.3.0a
 
 # 版本与设备
 & $hdc version; & $hdc list targets
@@ -408,7 +408,7 @@ python -c "import re;d=open('libweb_engine.so','rb').read(60_000_000);print(sort
 ## Spike 实测（2026-11-17）
 
 - 目的：验证本文 R1——普通 test-CA（非系统）应用里 `Web` 组件能否创建/加载本地 rawfile 与远程 https。
-- 工程：临时 spike，`bundleName=com.local.spike`，compileSdk 10（Stage），模板来自 `D:\ohos-kiosk`；用 SDK 自带 `OpenHarmony.p12` 测试 PKI 重新签发（OpenHarmony Application Root CA → Application CA → HomeKiosk App，10 年），profile 的 `bundle-name=com.local.spike`，`hdc install -r` 安装成功。应用为非系统应用（`isSystemApp=false`），未申请任何系统权限，仅 `ohos.permission.INTERNET`（normal）。
+- 工程：临时 spike，`bundleName=com.local.spike`，compileSdk 10（Stage），模板来自 `ohos-kiosk`；用 SDK 自带 `OpenHarmony.p12` 测试 PKI 重新签发（OpenHarmony Application Root CA → Application CA → HomeKiosk App，10 年），profile 的 `bundle-name=com.local.spike`，`hdc install -r` 安装成功。应用为非系统应用（`isSystemApp=false`），未申请任何系统权限，仅 `ohos.permission.INTERNET`（normal）。
 - 页面：`Column` + 固定高度 `Web({ src: $rawfile('spike.html'), controller })` + 按钮 + 可滚动日志；`spike.html` 内容为 `<h1>ok</h1><script>document.title='js-ok'</script>`，页面在 rawfile 加载 8 秒后自动执行 `controller.loadUrl('https://example.com')`。
 
 实测现象（hilog，tag `A00fff/HomeKiosk: spike ...`）：
@@ -430,7 +430,7 @@ python -c "import re;d=open('libweb_engine.so','rb').read(60_000_000);print(sort
 
 > 2026-11-17 追加。依据：API 11 SDK `.d.ts`（4.1.7.5）+ OpenHarmony 4.1 官方文档 + API 10 SDK 对照；详见 [VERIFY-BROWSER-TRANSFER.md](VERIFY-BROWSER-TRANSFER.md)。以下只列需改动的结论，正文其余部分保持原样。
 
-1. **§2.1 “`@kit.ArkWeb` 不可用（12+）” → 改为可用**：`D:\ohos-tools\sdk\openharmony-4.1-Release\ets\kits\@kit.ArkWeb.d.ts` 已存在，内容仅 `import webview from '@ohos.web.webview'; export { webview };`，与 `@ohos.web.webview` 等价。
+1. **§2.1 “`@kit.ArkWeb` 不可用（12+）” → 改为可用**：`$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/kits/@kit.ArkWeb.d.ts` 已存在，内容仅 `import webview from '@ohos.web.webview'; export { webview };`，与 `@ohos.web.webview` 等价。
 2. **§5.7 “没有真正的 incognito 隔离” → 改为可用**：`WebOptions.incognitoMode?: boolean`（`ets/component/web.d.ts:3541`，since 11）、`WebviewController.isIncognitoMode()`（`ets/api/@ohos.web.webview.d.ts:3660`，since 11）；`WebCookieManager` 的 Cookie/Geolocation 同步接口也接受 `incognito?`。注意其只隔离 Web 存储/Cookie/Geolocation，下载文件仍需自行清理。
 3. **§2.1 “`setWebDebuggingAccess(true)`（仅 debug 构建开启）” → 删除“仅 debug”限制**：SDK 与 4.1 `web-debugging-with-devtools.md` 均未限制构建类型，只要求 `INTERNET` + `hdc fport`。建议改为“建议仅 debug 构建开启”。
 4. **§5.3 “API 11 无公开的跨进程续传保证” → 改为有 API、但不能后台托管**：API 11 提供 `WebDownloadItem.serialize()` / `static deserialize()`（`@ohos.web.webview.d.ts:4070/4080`）与 `WebDownloadManager.setDownloadDelegate()/resumeDownload()`（`:4136/4145`），可恢复失败/取消的下载；但下载不由系统服务托管，应用进程被杀后不能继续，不能当后台下载服务。

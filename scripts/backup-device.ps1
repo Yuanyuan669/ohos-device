@@ -6,16 +6,16 @@
   通过 hdc + dd 读取 /dev/block/by-name/<partition>，先落到设备 /data/local/tmp，
   再拉回 PC，计算 SHA256，生成 manifest。不会写任何分区，不会备份 112 GB 的 userdata。
 .EXAMPLE
-  powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir D:\ohos-backup\LHT16-20261115
+  powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir $env:OHOS_BACKUP\LHT16-20261115
 .EXAMPLE
-  powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir D:\ohos-backup\LHT16-20261115 -Profile all -Yes
+  powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir $env:OHOS_BACKUP\LHT16-20261115 -Profile all -Yes
 #>
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [string]$OutDir,
 
-    [string]$Hdc = "D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe",
+    [string]$Hdc = "",
     [string]$DeviceSerial = "",
 
     [ValidateSet("critical", "all")]
@@ -27,6 +27,12 @@ param(
     [switch]$KeepDeviceCopies,
     [switch]$DryRun
 )
+
+if (-not $Hdc) {
+    $Hdc = if ($env:OHOS_HDC) { $env:OHOS_HDC }
+    elseif ($env:OHOS_TOOLS) { Join-Path $env:OHOS_TOOLS 'sdk\openharmony\toolchains\hdc.exe' }
+    else { '' }
+}
 
 $ErrorActionPreference = "Stop"
 

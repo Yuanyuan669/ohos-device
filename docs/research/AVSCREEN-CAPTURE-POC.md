@@ -15,7 +15,7 @@
 
 ## PoC 工程
 
-临时工程：`D:\ohos-screentest`（从 browser 复制，bundle `com.local.screentest`，compileSdk 11）。
+临时工程：`ohos-screentest`（从 browser 复制，bundle `com.local.screentest`，compileSdk 11）。
 
 - `entry/src/main/ets/pages/CapTest.ets`：启动/停止/统计 JSON，页面有 `LoadingProgress` 制造持续刷新。
 - `entry/src/main/cpp/screencap.cpp`：NAPI 模块 `libscreencap.so`。

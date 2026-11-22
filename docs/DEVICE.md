@@ -40,8 +40,8 @@
 
 - 开发者模式已开，USB 调试已开（设置 -> 关于本机 -> 连点版本号 -> 开发者选项）。
 - `hdc list targets` 能列出序列号；两台 hdc 客户端都能识别这块板子：
-  - SDK 4.0 自带 hdc：`D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe`，Ver 1.3.0a
-  - DevEco 26 自带 hdc：`D:\DevEcoStudio\sdk\default\openharmony\toolchains\hdc.exe`，Ver 3.2.0f
+  - SDK 4.0 自带 hdc：`$OHOS_TOOLS/sdk/openharmony/toolchains/hdc.exe`，Ver 1.3.0a
+  - DevEco 26 自带 hdc：`$DEVECO_HOME/sdk/default/openharmony/toolchains/hdc.exe`，Ver 3.2.0f
 - shell 身份是 root；除 `/data` 与沙箱外大多只读。
 - 系统里没有 `getprop` / `getparam` / `curl` / `wget`，取属性用 `param get <key>`。
 - `const.debuggable = 1`、`const.secure = 0`，内核 cmdline 里 `androidboot.selinux=permissive`。

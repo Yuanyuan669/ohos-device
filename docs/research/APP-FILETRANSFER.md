@@ -258,7 +258,7 @@ hdc rport remotenode localnode        # 设备端口 -> 主机端口
 
 **已有先例**
 
-`D:\ohos-kiosk\scripts\push-photos.sh` 已经做过：
+`ohos-kiosk/scripts/push-photos.sh` 已经做过：
 
 - 优先直接写应用沙箱 `/data/app/el2/100/base/<bundle>/haps/<module>/files/...`；
 - root 写入后 `chown` 回应用 uid、`chmod 660`；
@@ -524,14 +524,14 @@ hdc rport remotenode localnode        # 设备端口 -> 主机端口
 | `kazuhikoarase/qrcode-generator` | MIT | JS/TS | 二维码生成 | 仅编码；首版不需要，后续可选 |
 | `SomethingNotReal/Harmonyos-NetFile-Project` | 无 | 空仓库（仅 README） | 无 | 忽略 |
 
-> 克隆位置：`C:\Users\21996\AppData\Local\Temp\opencode\filetransfer-research\`（临时目录，可随时删除）。GitHub 直连失败时经 `gh-proxy.com` 克隆；OpenHarmony 仓库经 `gitcode.com` 镜像获取。
+> 克隆位置：临时目录 `opencode/filetransfer-research/`（可随时删除）。GitHub 直连失败时经 `gh-proxy.com` 克隆；OpenHarmony 仓库经 `gitcode.com` 镜像获取。
 
 ---
 
 ## 附录 A：本次只读探查命令（可复现）
 
 ```powershell
-$hdc = "D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe"
+$hdc = "$OHOS_TOOLS/sdk/openharmony/toolchains/hdc.exe"
 
 # 设备/包信息
 & $hdc shell "param get const.product.model; param get const.ohos.apiversion"

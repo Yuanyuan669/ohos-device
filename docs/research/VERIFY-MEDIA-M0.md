@@ -1,7 +1,7 @@
 # 媒体 M0 实测（LHT16 / OpenHarmony 4.1.7.5 / API 11）
 
 日期：2026-11-17  
-工程：`D:\ohos-media`，bundle `com.local.media`（test-CA 普通应用）  
+工程：`ohos-media`，bundle `com.local.media`（test-CA 普通应用）  
 测试素材：ffmpeg 生成 5 s / 440 Hz 合成样本（320x240 视频），推到应用沙箱 `files/media` 后逐个播放 2 s。
 
 ## 1. 格式矩阵（AVPlayer + `fdSrc`）

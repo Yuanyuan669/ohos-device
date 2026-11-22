@@ -213,7 +213,7 @@ update.server.port = 16895
 本仓提供只读脚本：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir D:\ohos-backup\LHT16-20261115
+powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir $env:OHOS_BACKUP\LHT16-20261115
 ```
 
 脚本会：

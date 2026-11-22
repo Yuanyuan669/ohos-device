@@ -7,6 +7,22 @@
 而且相机/GPU/GNSS/RIL/PAC 等闭源文件仍需原厂提供。API 26 仍缺厂商 4.1/5.x/6.x 分支或新 OTA。
 详见 [VENDOR-BUILD.md](VENDOR-BUILD.md)。
 
+## 零、环境变量约定（各仓共用）
+
+文档与脚本不再写死盘符，工具链/输出目录统一用下面几个变量；未设置时脚本按 PATH 和常见安装位置回退。
+
+| 变量 | 含义 | 未设置时 |
+| --- | --- | --- |
+| `OHOS_TOOLS` | 工具链根：`sdk/`、`hvigor-3.2.4/`、`java/jdk-17/` | 按 `OHOS_HDC`/PATH 找 hdc |
+| `DEVECO_HOME` | DevEco Studio 安装目录（自带 sdk/node/ohpm） | 只提示缺失 |
+| `OHOS_HDC` | 指定 `hdc` 可执行文件，优先级最高 | 见上 |
+| `OHOS_BACKUP` | `backup-device.ps1` 默认输出目录 | 脚本参数默认值 |
+| `OHOS_BUILD` | 远端构建产物落地目录 | 脚本参数默认值 |
+| `OHOS_JDK` | 构建用 JDK 路径（`set-jdk.ps1` 优先读它） | 依次回退 `OHOS_TOOLS/java/jdk-17`、`DEVECO_HOME/jbr` |
+| `OHOS_WSL_ROOT` | WSL 发行版安装根（`setup-wsl.ps1`） | 脚本所在盘符下的 `wsl` 目录 |
+
+PowerShell 用法：`$env:OHOS_TOOLS = '<你的工具链根>'`；Git Bash/WSL：`export OHOS_TOOLS=<你的工具链根>`。
+
 ## 一、主机
 
 | 项 | 实测值 |
@@ -28,14 +44,14 @@
 
 | 工具 | 路径 | 版本/用途 |
 | --- | --- | --- |
-| DevEco Studio | `D:\DevEcoStudio` | 26.0.1.290 |
-| DevEco 自带 OpenHarmony SDK | `D:\DevEcoStudio\sdk\default\openharmony` | API 26 / 26.0.1 Beta1，ets 26.0.1.120；用于应用编译，不是系统源码 |
-| OpenHarmony 4.0 SDK | `D:\ohos-tools\sdk\openharmony-4.0-Release` | API 10，ets/toolchains 4.0.10.13；kiosk 工程在用 |
-| SDK API 目录 junction | `D:\ohos-tools\sdk\10` -> 上述 4.0 SDK | hvigor 3.2.4 需要 `$OHOS_BASE_SDK_HOME/<api>/<component>` |
-| hvigor | `D:\ohos-tools\hvigor-3.2.4` | 与 API 10 同代 |
-| JDK | `D:\ohos-tools\java\jdk-17` | OpenJDK 17.0.21；当前 `JAVA_HOME` 未设置，kiosk 的 `env.sh` 会补 |
-| hdc（旧） | `D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe` | Ver 1.3.0a，与 4.x 镜像同代 |
-| hdc（新） | `D:\DevEcoStudio\sdk\default\openharmony\toolchains\hdc.exe` | Ver 3.2.0f |
+| DevEco Studio | `$DEVECO_HOME` | 26.0.1.290 |
+| DevEco 自带 OpenHarmony SDK | `$DEVECO_HOME/sdk/default/openharmony` | API 26 / 26.0.1 Beta1，ets 26.0.1.120；用于应用编译，不是系统源码 |
+| OpenHarmony 4.0 SDK | `$OHOS_TOOLS/sdk/openharmony-4.0-Release` | API 10，ets/toolchains 4.0.10.13；kiosk 工程在用 |
+| SDK API 目录 junction | `$OHOS_TOOLS/sdk/10` -> 上述 4.0 SDK | hvigor 3.2.4 需要 `$OHOS_BASE_SDK_HOME/<api>/<component>` |
+| hvigor | `$OHOS_TOOLS/hvigor-3.2.4` | 与 API 10 同代 |
+| JDK | `$OHOS_TOOLS/java/jdk-17` | OpenJDK 17.0.21；当前 `JAVA_HOME` 未设置，kiosk 的 `env.sh` 会补 |
+| hdc（旧） | `$OHOS_TOOLS/sdk/openharmony/toolchains/hdc.exe` | Ver 1.3.0a，与 4.x 镜像同代 |
+| hdc（新） | `$DEVECO_HOME/sdk/default/openharmony/toolchains/hdc.exe` | Ver 3.2.0f |
 
 ## 二、设备
 

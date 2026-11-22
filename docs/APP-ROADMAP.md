@@ -60,7 +60,7 @@
 
 **第一件事：先交付 C（`hdc` 兜底脚本，0.5~1 人日）拿到"今天就能传"的基线，同时并行 A 的 P0-11~P0-13 三项。** 理由：C 零 App 开发、零端口、零局域网暴露，且已有 `push-photos.sh` 先例（root 写沙箱 + chown/660 + 失败退 `/data/local/tmp`）。
 
-> **2026-11-17 进展（MVP 已落地）**：`D:\ohos-transfer`（bundle `com.local.transfer`，commit `b9aa390`）。
+> **2026-11-17 进展（MVP 已落地）**：`ohos-transfer`（bundle `com.local.transfer`，commit `b9aa390`）。
 > 已实现并实测：自动监听 `0.0.0.0:8080` + 6 位 PIN；PC 浏览器（同网段 192.168.31.x）打开页面拖拽上传/列表/下载；
 > 5 MB 中文名上传→下载 SHA256 一致；错误 PIN 返回 401；退出（terminateSelf）后端口释放；切后台 45 s 端口与进程仍存活。
 > `scripts/transfer.sh` 的 hdc `push/list/pull` 已实测（含 chown 660）。
@@ -193,7 +193,7 @@
 | picker URI "Web 直接读取即可"（通用） | `select` 只读、不可持久化（`FILE_ACCESS_PERSIST` 为 system_basic+ACL） |
 ## 11. Phase 2 M0 实测（2026-11-17）
 
-- 工程：`D:\ohos-media`（`com.local.media`），AVPlayer + `fdSrc` + XComponent surface。
+- 工程：`ohos-media`（`com.local.media`），AVPlayer + `fdSrc` + XComponent surface。
 - **格式矩阵 10/10 通过**：FLAC/M4A/MP3/OGG(Vorbis)/OPUS/WAV/MKV(H.264)/MP4(H.264)/TS(H.264)/**HEVC(320x240)**。
   HEVC 小分辨率可播，风险收缩到 4K/10bit/大码率；不是容器格式问题。
 - **后台播放**：AVSession + `audioPlayback` 后切到笔记，98 s 内 position 持续增长、`state=playing bg=yes`、进程存活（无 AVSession 时约 1.1 s 被暂停）。
@@ -204,7 +204,7 @@
 
 - 快传：https://github.com/Yuanyuan669/ohos-transfer （main `8947274`）
 - 媒体：https://github.com/Yuanyuan669/ohos-media （main `e3c294f`）
-- 浏览器 / 应用中心：目录已预建（`D:\ohos-browser`、`D:\ohos-appcenter`），GitHub 空仓库待推。
+- 浏览器 / 应用中心：目录已预建（`ohos-browser`、`ohos-appcenter`），GitHub 空仓库待推。
 - 说明：两个仓库都保留了 GitHub 模板的 `LICENSE`（Initial commit），本地 `main` 已 rebase 并跟踪 origin。
 
 - **2026-11-17 M2 完成**：音频播放器（音频列表、播放/暂停/seek、上下曲、播完自动下一首、后台播放），提交 `fca73b1`；修复 fdSrc 异步 initialized 导致的 5400102。
@@ -234,7 +234,7 @@
 
 - **拓展备忘（DLNA 媒体推送）**：应用层 SSDP 发现电视 + `AVTransport` 推 URL，手机跑本地 HTTP 提供媒体；只推音视频/图片，不镜像，无需系统权限，2~3 人日。作为 Phase 5 可选后备，优先级低。
 
-- **2026-11-17 ohos-remote MVP**：`D:\ohos-remote`，Python/Tkinter + hdc；设备发现、`snapshot_display` 实时画面（2.0 fps，1080x2408）、点击/拖拽/文本、文件上传、装 HAP、Shell、无线 tconn。无音频；依赖 uitest；本机验证画面与上传通过。commit（本地 `f5e03a7`，GitHub 仓库待建）。
+- **2026-11-17 ohos-remote MVP**：`ohos-remote`，Python/Tkinter + hdc；设备发现、`snapshot_display` 实时画面（2.0 fps，1080x2408）、点击/拖拽/文本、文件上传、装 HAP、Shell、无线 tconn。无音频；依赖 uitest；本机验证画面与上传通过。commit（本地 `f5e03a7`，GitHub 仓库待建）。
 
 - **2026-11-18 ohos-remote 打磨**：返回/主页键码实测（2/1，uinput）；PyInstaller 打包 30MB exe 可用（2.1fps）；agent 一键启动脚本。中文输入/TLS/开机自启仍待办。
 
@@ -243,13 +243,13 @@
 
 ## 2026-11-20 新增开发仓库
 
-- **Kika 输入法（参考实现）**：`D:\ohos-kika`，上游 `https://gitee.com/ohos_port/applications_inputmethod.git`，commit `cd27df5`（2025-07-23，v1.0.0）。已改签名/权限后构建安装为 `com.ohos.chineseinput`，可在输入法选择器中切换。板上预置 Kika 为 `com.kika.hmos.inputmethod` 1.0.3 与 `com.example.kikakeyboard` 1.1.12，不是同一发布物。下一步对比其九键/候选词实现，择机移植回 `D:\ohos-homeime`。
-- **OhBili（B 站客户端）**：`D:\ohos-ohbili`，`git@github.com:JasonToJan/OhBili.git`，当前 commit `a429fe0`（2023-11-14）。纳入后续应用优化队列，先做构建可行性验证，再排功能/性能优化。
+- **Kika 输入法（参考实现）**：`ohos-kika`，上游 `https://gitee.com/ohos_port/applications_inputmethod.git`，commit `cd27df5`（2025-07-23，v1.0.0）。已改签名/权限后构建安装为 `com.ohos.chineseinput`，可在输入法选择器中切换。板上预置 Kika 为 `com.kika.hmos.inputmethod` 1.0.3 与 `com.example.kikakeyboard` 1.1.12，不是同一发布物。下一步对比其九键/候选词实现，择机移植回 `ohos-homeime`。
+- **OhBili（B 站客户端）**：`ohos-ohbili`，`git@github.com:JasonToJan/OhBili.git`，当前 commit `a429fe0`（2023-11-14）。纳入后续应用优化队列，先做构建可行性验证，再排功能/性能优化。
 - **OhMyBili 网页套壳版**：原生 API 9→11 迁移被大量 `Importing ArkTS files in JS and TS files is forbidden` 阻塞，改为在 fork 内新增 `web` 模块加载 `https://m.bilibili.com/`。已完成移动 UA、Cookie 持久化、底部后退/前进/刷新/首页/搜索、拦截 `bilibili://`、隐藏下载/打开 App 浮层；实机验证首页、视频播放（720P）与返回/首页。包名沿用 `com.wathinst.ohbili`，HAP 位于 `web/build/default/outputs/default/web-default-signed.hap`。已补全屏：页面注入悬浮“全屏”按钮（真实用户手势）调用 `<video>` 的 `webkitEnterFullscreen`，`onFullScreenEnter` 隐藏系统栏/底栏并自动横屏，原生“退出全屏”按钮恢复竖屏/系统栏；实测进/出全屏均正常。注意此 OH 4.1 ArkWeb 退出全屏后页面合成层残留透明，已在退出后延迟调用 `controller.refresh()` 规避（代价是视频回到待播状态）。
 - **音乐应用调研**：`https://gitee.com/WRY666/ohos_-music-card` 是 HarmonyOS 2 的 Java/JS 卡片样例（compileSdkVersion 6、Gradle），不兼容当前 OH 4.1/API 11。在线侧：网易云 `littlestone0806/NetEaseCloudMusic-ohos` 为 `music.163.com/st/webplayer` 的 ArkWeb 套壳（与本项目路线最接近），`kidGuo/HarmonyOS-NetEase-Cloud-Music` 为原生 ArkTS API 9 客户端；酷狗 `HU-WEITAO/EchoMusic_OHOS` 要求 API 23/HarmonyOS 6.1，过新；汽水仅自动化脚本，QQ 音乐仅手表版，暂无可用手机开源客户端。下一步优先做网易云网页套壳或移植 kidGuo 原生客户端。
-- **音乐应用 `D:\ohos-music`（进行中）**：bundle `com.local.music`，复用 OhBili 的 ArkWeb 壳与 hvigor 3.2.4/签名流程，已安装运行。在线页加载 `https://music.163.com/st/webplayer`，移动 UA，拦截 `orpheus://`/`netease-music://` 等；本地页已跑通：profile 改为 `apl=system_basic` + `app-feature=hos_system_app`，ACL 加 `ohos.permission.READ_MEDIA`/`READ_WRITE_DOWNLOAD_DIRECTORY`，安装后用 root `atm perm -g -i <tokenID> -p ...` 授权；通过 `mediaLibrary.getFileAssets` 取 AUDIO、`FileAsset.open('r')` 拿 fd 交给 AVPlayer `fdSrc`。已实现歌曲列表、当前曲高亮、播放/暂停/停止、`timeUpdate` 进度条与拖动 seek；用 `tone.wav`/`tone10.wav` 实测切歌、00:03/00:10 进度、seek 正常。AudioViewPicker 返回 docs URI 后 `fs.openSync` 仍报 `13900001`（app 沙箱无该路径挂载），文件选择暂不可用，优先用媒体库扫描。
+- **音乐应用 `OhMusic`（进行中）**：bundle `com.local.music`，复用 OhBili 的 ArkWeb 壳与 hvigor 3.2.4/签名流程，已安装运行。在线页加载 `https://music.163.com/st/webplayer`，移动 UA，拦截 `orpheus://`/`netease-music://` 等；本地页已跑通：profile 改为 `apl=system_basic` + `app-feature=hos_system_app`，ACL 加 `ohos.permission.READ_MEDIA`/`READ_WRITE_DOWNLOAD_DIRECTORY`，安装后用 root `atm perm -g -i <tokenID> -p ...` 授权；通过 `mediaLibrary.getFileAssets` 取 AUDIO、`FileAsset.open('r')` 拿 fd 交给 AVPlayer `fdSrc`。已实现歌曲列表、当前曲高亮、播放/暂停/停止、`timeUpdate` 进度条与拖动 seek；用 `tone.wav`/`tone10.wav` 实测切歌、00:03/00:10 进度、seek 正常。AudioViewPicker 返回 docs URI 后 `fs.openSync` 仍报 `13900001`（app 沙箱无该路径挂载），文件选择暂不可用，优先用媒体库扫描。
 - **KidGuo 网易云原生客户端**：源码已从 `kidGuo/HarmonyOS-NetEase-Cloud-Music` 下载（GitHub 直连被 reset，用 `gh-proxy.com`），但 upstream 当前 `build-profile.json5` 为 `targetSdkVersion 6.0.0(20)` / `compatibleSdkVersion 6.0.0(20)`、`runtimeOS: HarmonyOS`，并非早期记录的 API 9；项目 90 个 `.ets`、约 179 KB，依赖 `@ohos/axios ^2.2.6`。移植到 OH 4.1/API 11 需要降 SDK、替换 routerMap/备份扩展、处理依赖，属于独立迁移任务。
-- **在线仓库**：`D:\ohos-music` 已初始化并推送到 `git@github.com:Yuanyuan669/OhMusic.git`（`main`，commit `d1b82e8`，签名/构建产物已忽略）；KidGuo 源码已导入 `D:\ohos-netease-kidguo` 并推送到 `git@github.com:Yuanyuan669/ohos-netease-kidguo.git`（`main`，commit `4902eaa`，`video.mov` 已从历史清除，含 upstream 源码与 `MIGRATION.md`）。
-- **截图/录屏工程 `D:\ohos-screen`（初始化）**：bundle `com.local.screen`，system_core；已完成 `model/ScreenTypes.ets`、`services/ScreenService.ets`、native `screen_capture.h` 契约，现有 AVScreenCapture 预览实测 `帧 20 / 1080x2408`；截图 2x 与 MP4 录制为 TODO。本地 git 已提交（`b1049e8`），远端仓库待建。
+- **在线仓库**：`OhMusic` 已初始化并推送到 `git@github.com:Yuanyuan669/OhMusic.git`（`main`，commit `d1b82e8`，签名/构建产物已忽略）；KidGuo 源码已导入 `ohos-netease-kidguo` 并推送到 `git@github.com:Yuanyuan669/ohos-netease-kidguo.git`（`main`，commit `4902eaa`，`video.mov` 已从历史清除，含 upstream 源码与 `MIGRATION.md`）。
+- **截图/录屏工程 `ohos-screen`（初始化）**：bundle `com.local.screen`，system_core；已完成 `model/ScreenTypes.ets`、`services/ScreenService.ets`、native `screen_capture.h` 契约，现有 AVScreenCapture 预览实测 `帧 20 / 1080x2408`；截图 2x 与 MP4 录制为 TODO。本地 git 已提交（`b1049e8`），远端仓库待建。
 
 

@@ -3,8 +3,8 @@
 - 核实日期：2026-11-17
 - 核实对象：`docs/research/APP-BROWSER.md`、`docs/research/APP-FILETRANSFER.md`
 - 核实边界：**不碰设备**。只做 SDK `.d.ts`、OpenHarmony 4.1 官方文档（`OpenHarmony-4.1-Release` 分支）、上游示例源码、Linux 内核文档的静态比对
-- 主证据 SDK：`D:\ohos-tools\sdk\openharmony-4.1-Release`（`ets/oh-uni-package.json`：`apiVersion=11`，`version=4.1.7.5`）
-- 对照 SDK：`D:\ohos-tools\sdk\10`（`apiVersion=10`，`version=4.0.10.13`；用于 API 10→11 增量比对，属 4.0 Release SDK，API 级别比较有效）
+- 主证据 SDK：`$OHOS_TOOLS/sdk/openharmony-4.1-Release`（`ets/oh-uni-package.json`：`apiVersion=11`，`version=4.1.7.5`）
+- 对照 SDK：`$OHOS_TOOLS/sdk/10`（`apiVersion=10`，`version=4.0.10.13`；用于 API 10→11 增量比对，属 4.0 Release SDK，API 级别比较有效）
 - 证据等级：**A**=SDK 声明/源码可直接引用；**B**=官方文档明文；**C**=间接推断/需实机确认；**D**=未找到依据
 - 与设备实测的关系：两份文档已于 2026-11-17 追加 `## Spike 实测`（设备侧，不属于本报告方法）。本报告只在与其重叠处引用该实测作为 C 级佐证；若冲突以设备实测为准
 
@@ -257,18 +257,18 @@
 
 | 内容 | 路径 |
 | --- | --- |
-| Web 组件声明 | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\component\web.d.ts` |
-| WebView 控制器/下载 | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.web.webview.d.ts` |
-| ArkWeb Kit 别名 | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\kits\@kit.ArkWeb.d.ts` |
-| Socket | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.net.socket.d.ts` |
-| NetAddress | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.net.connection.d.ts` |
-| request | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.request.d.ts` |
-| picker | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.file.picker.d.ts` |
-| fileshare（URI 持久化） | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.fileshare.d.ts` |
-| 长时任务 | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.resourceschedule.backgroundTaskManager.d.ts` |
-| window（keep screen on） | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.window.d.ts` |
-| 默认 syscap | `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\device-define\default.json`（L182） |
-| API 10 对照 | `D:\ohos-tools\sdk\10\ets\...`（`apiVersion=10`，`4.0.10.13`） |
+| Web 组件声明 | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/component/web.d.ts` |
+| WebView 控制器/下载 | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.web.webview.d.ts` |
+| ArkWeb Kit 别名 | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/kits/@kit.ArkWeb.d.ts` |
+| Socket | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.net.socket.d.ts` |
+| NetAddress | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.net.connection.d.ts` |
+| request | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.request.d.ts` |
+| picker | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.file.picker.d.ts` |
+| fileshare（URI 持久化） | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.fileshare.d.ts` |
+| 长时任务 | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.resourceschedule.backgroundTaskManager.d.ts` |
+| window（keep screen on） | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.window.d.ts` |
+| 默认 syscap | `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/device-define/default.json`（L182） |
+| API 10 对照 | `$OHOS_TOOLS/sdk/10/ets/...`（`apiVersion=10`，`4.0.10.13`） |
 
 ### 6.2 官方文档（OpenHarmony-4.1-Release）
 

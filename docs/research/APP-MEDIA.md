@@ -21,8 +21,8 @@
 
 ## 1. 调研方法与边界
 
-- 实机：`hdc`（`D:\DevEcoStudio\sdk\default\openharmony\toolchains\hdc.exe`，3.2.0f）只读探查；只做了 `aa start`、`uitest` 点击、`snapshot_display` 截图、`mediatool send` 添加测试视频、`hidumper` 查询。没有写系统分区、没有卸载/替换预置应用。
-- 代码/文档：OpenHarmony 4.1-Release 官方文档；`applications_app_samples` 4.1 分支；`applications_photos` 4.1 分支；GitHub 上的 `cclisten` 等候选仓库。克隆/解压目录在 `C:\Users\21996\AppData\Local\Temp\opencode\media-research\`（仓库外，不污染本仓）。
+- 实机：`hdc`（`$DEVECO_HOME/sdk/default/openharmony/toolchains/hdc.exe`，3.2.0f）只读探查；只做了 `aa start`、`uitest` 点击、`snapshot_display` 截图、`mediatool send` 添加测试视频、`hidumper` 查询。没有写系统分区、没有卸载/替换预置应用。
+- 代码/文档：OpenHarmony 4.1-Release 官方文档；`applications_app_samples` 4.1 分支；`applications_photos` 4.1 分支；GitHub 上的 `cclisten` 等候选仓库。克隆/解压目录在临时目录 `opencode/media-research/`（仓库外，不污染本仓）。
 - 设备侧“实测”与“文档推断”在文中分别标注；没有条件实测的（普通应用 READ_MEDIA、AVSession 后台）明确标为 M0 待验证。
 
 ---
@@ -617,7 +617,7 @@ entry/src/main/ets/
 ## 9. 附录：本次实测命令与关键原始点
 
 ```powershell
-$HDC="D:\DevEcoStudio\sdk\default\openharmony\toolchains\hdc.exe"
+$HDC="$DEVECO_HOME/sdk/default/openharmony/toolchains/hdc.exe"
 
 # 设备
 & $HDC shell "param get const.ohos.fullname; param get const.ohos.apiversion"

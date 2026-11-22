@@ -8,16 +8,30 @@
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File scripts/doctor.ps1
 .EXAMPLE
-  powershell -ExecutionPolicy Bypass -File scripts/doctor.ps1 -Hdc "D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe"
+  powershell -ExecutionPolicy Bypass -File scripts/doctor.ps1 -Hdc "$env:OHOS_TOOLS\sdk\openharmony\toolchains\hdc.exe"
 #>
 [CmdletBinding()]
 param(
-    [string]$Hdc = "D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe",
-    [string]$NewHdc = "D:\DevEcoStudio\sdk\default\openharmony\toolchains\hdc.exe",
+    [string]$Hdc = "",
+    [string]$NewHdc = "",
     [string]$DeviceSerial = "",
-    [string]$RepoRoot = "D:\ohos-device",
-    [string]$BackupRoot = "D:\ohos-backup"
+    [string]$RepoRoot = "",
+    [string]$BackupRoot = ""
 )
+
+# 路径不写死：优先环境变量，其次按脚本位置推算
+if (-not $RepoRoot) { $RepoRoot = Split-Path -Parent $PSScriptRoot }
+if (-not $BackupRoot) {
+    $BackupRoot = if ($env:OHOS_BACKUP) { $env:OHOS_BACKUP } else { Join-Path (Split-Path -Parent $RepoRoot) 'backup' }
+}
+if (-not $Hdc) {
+    $Hdc = if ($env:OHOS_HDC) { $env:OHOS_HDC }
+    elseif ($env:OHOS_TOOLS) { Join-Path $env:OHOS_TOOLS 'sdk\openharmony\toolchains\hdc.exe' }
+    else { '' }
+}
+if (-not $NewHdc) {
+    $NewHdc = if ($env:DEVECO_HOME) { Join-Path $env:DEVECO_HOME 'sdk\default\openharmony\toolchains\hdc.exe' } else { '' }
+}
 
 $ErrorActionPreference = "Continue"
 try {
@@ -114,24 +128,25 @@ foreach ($tool in @("git", "python", "node", "cmake", "ninja", "7z")) {
 
 $java = Get-CommandPath "java"
 if ($java) { Write-OK ("java(PATH): " + $java) }
-elseif (Test-Exe "D:\ohos-tools\java\jdk-17\bin\java.exe") { Write-Info "java 不在 PATH，但 D:\ohos-tools\java\jdk-17 存在（kiosk env.sh 会补）" }
+elseif ($env:OHOS_TOOLS -and (Test-Exe (Join-Path $env:OHOS_TOOLS 'java\jdk-17\bin\java.exe'))) { Write-Info "java 不在 PATH，但 $OHOS_TOOLS/java/jdk-17 存在（kiosk env.sh 会补）" }
 else { Write-Warn "未找到 java" }
 
 Write-Section "SDK / IDE"
-$sdk40 = "D:\ohos-tools\sdk\openharmony\ets\oh-uni-package.json"
-$sdk26 = "D:\DevEcoStudio\sdk\default\openharmony\ets\oh-uni-package.json"
-if (Test-Path -LiteralPath $sdk40) {
+$sdk40 = if ($env:OHOS_TOOLS) { Join-Path $env:OHOS_TOOLS 'sdk\openharmony\ets\oh-uni-package.json' } else { '' }
+$sdk26 = if ($env:DEVECO_HOME) { Join-Path $env:DEVECO_HOME 'sdk\default\openharmony\ets\oh-uni-package.json' } else { '' }
+if ($sdk40 -and (Test-Path -LiteralPath $sdk40)) {
     $j = Get-Content -LiteralPath $sdk40 -Raw | ConvertFrom-Json
     Write-OK ("OpenHarmony 4.0 SDK: apiVersion=" + $j.apiVersion + " version=" + $j.version)
-} else { Write-Miss "OpenHarmony 4.0 SDK 未找到（kiosk 应用构建需要）" }
+} else { Write-Miss "OpenHarmony 4.0 SDK 未找到（kiosk 应用构建需要；设 OHOS_TOOLS）" }
 
-if (Test-Path -LiteralPath $sdk26) {
+if ($sdk26 -and (Test-Path -LiteralPath $sdk26)) {
     $j = Get-Content -LiteralPath $sdk26 -Raw | ConvertFrom-Json
     Write-OK ("DevEco OpenHarmony SDK: apiVersion=" + $j.apiVersion + " version=" + $j.version + " (" + $j.releaseType + ")")
-} else { Write-Warn "DevEco 自带 OpenHarmony SDK 未找到" }
+} else { Write-Warn "DevEco 自带 OpenHarmony SDK 未找到（设 DEVECO_HOME）" }
 
-if (Test-Path -LiteralPath "D:\DevEcoStudio\product-info.json") {
-    $p = Get-Content -LiteralPath "D:\DevEcoStudio\product-info.json" -Raw | ConvertFrom-Json
+$productInfo = if ($env:DEVECO_HOME) { Join-Path $env:DEVECO_HOME 'product-info.json' } else { '' }
+if ($productInfo -and (Test-Path -LiteralPath $productInfo)) {
+    $p = Get-Content -LiteralPath $productInfo -Raw | ConvertFrom-Json
     Write-Info ("DevEco Studio: " + $p.version)
 }
 

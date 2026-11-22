@@ -25,7 +25,7 @@ OOM 或重装系统便宜得多。
 
 ```powershell
 # Windows -> 掌机
-scp -r D:\ohos-device\scripts <user>@<掌机IP>:~/ohos-device-scripts
+scp -r ohos-device/scripts <user>@<掌机IP>:~/ohos-device-scripts
 ```
 
 或者等本仓推到 GitHub 后直接 `git clone`。
@@ -155,8 +155,8 @@ sudo -u ohos -H bash -lc '
 7. 把产物传回 Windows：
 
 ```powershell
-scp <user>@<掌机IP>:/home/ohos/ohos/out/laphone/packages/phone/images/laphone_nosec_userdebug.pac D:\ohos-build\
-scp <user>@<掌机IP>:/home/ohos/ohos/out/laphone/packages/phone/images/laphone_nosec_userdebug.tar.gz D:\ohos-build\
+scp <user>@<掌机IP>:/home/ohos/ohos/out/laphone/packages/phone/images/laphone_nosec_userdebug.pac $env:OHOS_BUILD\
+scp <user>@<掌机IP>:/home/ohos/ohos/out/laphone/packages/phone/images/laphone_nosec_userdebug.tar.gz $env:OHOS_BUILD\
 ```
 
 ## 六、性能与散热

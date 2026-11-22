@@ -3,7 +3,7 @@
 把硬开鸿 **LHT16**（展锐 UIS7885）开发板从 **OpenHarmony 4.1.7.5 / API 11** 往上推进，
 打通**系统源码构建、镜像打包、OTA/刷机、备份回滚**这条链路。
 
-应用开发/安装链路已经打通，代码和踩坑记录在 [`D:\ohos-kiosk`](https://github.com/Yuanyuan669/ohos-kiosk)；
+应用开发/安装链路已经打通，代码和踩坑记录在 [`ohos-kiosk`](https://github.com/Yuanyuan669/ohos-kiosk)；
 本仓只管系统层。
 
 ## 现状（2026-11-15）
@@ -63,7 +63,7 @@ wsl -d Ubuntu-20.04 -u root bash /mnt/d/ohos-device/scripts/setup-ubuntu.sh --sy
 ## 第一次备份
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir D:\ohos-backup\LHT16-20261115
+powershell -ExecutionPolicy Bypass -File scripts/backup-device.ps1 -OutDir $env:OHOS_BACKUP\LHT16-20261115
 ```
 
 只读备份 boot 链、NV/校准、system/vendor/product 等；默认不备份 112 GB 的 `userdata`。

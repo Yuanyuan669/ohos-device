@@ -152,7 +152,7 @@ error: install file path invalid.
 | ABI | `arm64-v8a` |
 | 构建 | `const.debuggable=1`，开发者模式 `true`，SELinux `enforce=0` |
 | Bundle 数 | 约 53 个条目（用户 100） |
-| hdc | `1.3.0a`（`D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe`） |
+| hdc | `1.3.0a`（`$OHOS_TOOLS/sdk/openharmony/toolchains/hdc.exe`） |
 | 设备序列号 | `<device-serial>`（本机实测，已脱敏） |
 
 ### 2.2 三个预置应用
@@ -284,7 +284,7 @@ bm install -p <hap-path> [-r] [-u <user-id>] [-w <180-600s>]
 
 ## 4. 开源项目调研
 
-克隆/评估目录：`C:\Users\21996\AppData\Local\Temp\opencode\appcenter-research\repos\`（仅调研，未复制进本仓）。
+克隆/评估目录：临时目录 `opencode/appcenter-research/repos/`（仅调研，未复制进本仓）。
 
 说明：Gitee 的仓库搜索页是前端渲染，公开搜索 API 未返回可用结果；因此以 GitHub 项目为主，并额外克隆了 HapLane 的 Gitee 镜像仓（`gitee-haplane-registry`）确认国内可访问性。
 
@@ -982,7 +982,7 @@ MVP（M0-M3）= **8.5-10d**。建议再加 20-30% 缓冲，尤其是网络/签�
 ## 附录 A：实测命令与关键输出
 
 ```powershell
-$hdc = "D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe"
+$hdc = "$OHOS_TOOLS/sdk/openharmony/toolchains/hdc.exe"
 $serial = "<device-serial>"
 
 # 设备信息
@@ -1040,11 +1040,7 @@ Digest verify result: true, DigestAlgorithm: SHA-256
 verify-app success
 ```
 
-截图（临时目录，未入库）：
-
-- `C:\Users\21996\AppData\Local\Temp\opencode\appcenter-research\shots\updateapp3.jpeg`
-- `C:\Users\21996\AppData\Local\Temp\opencode\appcenter-research\shots\betaclub.jpeg`
-- `C:\Users\21996\AppData\Local\Temp\opencode\appcenter-research\shots\dispatch.jpeg`
+截图（保存在临时调研目录，未入库）：`updateapp3.jpeg`、`betaclub.jpeg`、`dispatch.jpeg`。
 
 ---
 
@@ -1110,7 +1106,7 @@ verify-app success
 
 ```powershell
 param(
-  [string]$Hdc = "D:\ohos-tools\sdk\openharmony\toolchains\hdc.exe",
+  [string]$Hdc = "$OHOS_TOOLS/sdk/openharmony/toolchains/hdc.exe",
   [string]$Serial = "",
   [string]$Bundle = "com.example.appcenter",
   [string]$WorkDir = "$env:TEMP\ohos-appcenter-agent"
@@ -1153,7 +1149,7 @@ while ($true) {
 
 ## 附录 D：本次克隆/评估的仓库
 
-路径：`C:\Users\21996\AppData\Local\Temp\opencode\appcenter-research\repos\`
+路径：临时目录 `opencode/appcenter-research/repos/`（未入库）。
 
 | 目录 | 来源 | 评估 |
 | --- | --- | --- |
@@ -1167,7 +1163,7 @@ while ($true) {
 | `ohos-apps` | `shihuan1999/ohos-apps` | Release HAP 仓参考 |
 | `Aptoide-OHOS` | `PureHarmonyProject/Aptoide-OHOS` | 空仓库，不可用 |
 
-> 注：以上仓库只克隆到临时目录做评估，没有复制任何代码/二进制进 `D:\ohos-device`。
+> 注：以上仓库只克隆到临时目录做评估，没有复制任何代码/二进制进 `ohos-device`。
 
 ---
 

@@ -2,9 +2,9 @@
 
 - 验证日期：2026-11-17
 - 设备：LHT16（开发者手机），`const.ohos.fullname = OpenHarmony-4.1.7.5`，`const.ohos.apiversion = 11`
-- 被测包：`com.local.spikebg`（由 `D:\ohos-kiosk` 模板复制出的临时 spike，API 10 编译、普通调试签名）
+- 被测包：`com.local.spikebg`（由 `ohos-kiosk` 模板复制出的临时 spike，API 10 编译、普通调试签名）
 - 目的：确认（1）前台 `TCPSocketServer` 监听 8080 是否可用；（2）`AVPlayer` 用 rawfile fd 是否可播；（3）切到其他应用后进程 / 端口 / 音频是否存活。
-- hdc：`D:\ohos-tools\sdk\openharmony-4.0-Release\toolchains\hdc.exe`（设备在线，root shell）
+- hdc：`$OHOS_TOOLS/sdk/openharmony-4.0-Release/toolchains/hdc.exe`（设备在线，root shell）
 
 ## 0. 结论速览
 
@@ -18,7 +18,7 @@
 
 ## 1. Spike 构造
 
-1. 复制模板（排除 `build/`、`build-artifacts/`、`signing/`、`watchdog-logs/`、`feed/`、`assets/`、`.git/`、`.hvigor/`）到 `C:\Users\21996\AppData\Local\Temp\opencode\spike-bg`。
+1. 复制模板（排除 `build/`、`build-artifacts/`、`signing/`、`watchdog-logs/`、`feed/`、`assets/`、`.git/`、`.hvigor/`）到临时目录 `opencode/spike-bg`。
 2. `AppScope/app.json5` 的 `bundleName` 改为 `com.local.spikebg`。
 3. 用 Python 生成 1 s、8 kHz、单声道、16 bit PCM（440 Hz 正弦）的 `entry/src/main/resources/rawfile/test.wav`（16044 B）。
 4. `entry/src/main/ets/pages/Index.ets` 全量替换：`aboutToAppear` 里启动 TCP server 和 AVPlayer，页面用 `Scroll + Text` 显示时间戳日志；`setInterval(2000)` 打印 `player.state` 与 `currentTime` 作为存活心跳。
@@ -135,4 +135,4 @@ hdc shell "hidumper -s InputMethodService -a -a"
 - 卸载结果：`uninstall bundle successfully.`；随后 `bm dump -n com.local.spikebg` 报
   `error: failed to get information and the parameters may be wrong.`，`pidof` 为空，8080 无监听。
 - 输入法：`hidumper` 中 `com.local.homeime/ServiceExtAbility` 为 `"isCurrentIme": "true"`（另两个为 `false`），已恢复。
-- 临时工程 `C:\Users\21996\AppData\Local\Temp\opencode\spike-bg` 在取完证据后删除；`D:\ohos-kiosk`、`D:\ohos-homeime`、`D:\trading-master` 未做任何修改。
+- 临时工程目录 `opencode/spike-bg` 在取完证据后删除；`ohos-kiosk`、`ohos-homeime`、`trading-master` 未做任何修改。

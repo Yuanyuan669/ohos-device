@@ -1,10 +1,10 @@
 ﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
-  安装 WSL2 + Ubuntu 20.04，并把发行版放到 D 盘。
+  安装 WSL2 + Ubuntu 20.04，并把发行版放到指定目录（默认 `$OHOS_WSL_ROOT`，未设则用当前盘的 `wsl` 目录）。
 .DESCRIPTION
   需要管理员权限。会启用 WSL/虚拟机平台，安装 Canonical.Ubuntu.2004，
-  把发行版移动到 D:\wsl\Ubuntu-20.04，并写 .wslconfig（12 GB 内存 / 16 GB swap）。
+  把发行版移动到安装根目录，并写 .wslconfig（12 GB 内存 / 16 GB swap）。
   不会自动重启；如果 DISM 返回 3010，请重启后重新运行本脚本。
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File scripts/setup-wsl.ps1
@@ -12,12 +12,17 @@
 [CmdletBinding()]
 param(
     [string]$Distro = "Ubuntu-20.04",
-    [string]$InstallRoot = "D:\wsl\Ubuntu-20.04",
+    [string]$InstallRoot = "",
     [int]$MemoryGB = 12,
     [int]$SwapGB = 16,
     [int]$Processors = 12,
     [switch]$SkipInstall
 )
+
+if (-not $InstallRoot) {
+    $wslRoot = if ($env:OHOS_WSL_ROOT) { $env:OHOS_WSL_ROOT } else { Join-Path (Split-Path -Qualifier $PSScriptRoot) 'wsl' }
+    $InstallRoot = Join-Path $wslRoot $Distro
+}
 
 $ErrorActionPreference = "Stop"
 

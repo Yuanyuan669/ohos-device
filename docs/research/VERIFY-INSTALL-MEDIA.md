@@ -3,8 +3,8 @@
 - 核实日期：2026-11-17
 - 范围：只做源码 / SDK d.ts / 官方 4.1-Release 文档核实，不连接、不操作设备。
 - 本地 SDK：
-  - `D:\ohos-tools\sdk\openharmony-4.1-Release`（API 11 公开 SDK，下称“4.1 SDK”）
-  - `D:\ohos-tools\sdk\11`（另一份 API 11 SDK，用于交叉确认）
+  - `$OHOS_TOOLS/sdk/openharmony-4.1-Release`（API 11 公开 SDK，下称“4.1 SDK”）
+  - `$OHOS_TOOLS/sdk/11`（另一份 API 11 SDK，用于交叉确认）
 - 远端依据：`OpenHarmony-4.1-Release` 分支的 `docs`、`interface_sdk-js`、`security_access_token`、`bundlemanager_bundle_framework`。
 - 结论标记：**一致** / **文档需修正** / **未找到** / **未验证（不碰设备）**。
 
@@ -43,8 +43,8 @@
 
 公开 SDK 核实：
 
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.bundle.installer.d.ts` → **不存在**
-- `D:\ohos-tools\sdk\11\ets\api\@ohos.bundle.installer.d.ts` → **不存在**
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.bundle.installer.d.ts` → **不存在**
+- `$OHOS_TOOLS/sdk/11/ets/api/@ohos.bundle.installer.d.ts` → **不存在**
 - `ets\kits\@kit.AbilityKit.d.ts` 未导出 `installer`
 - 全 `ets\api\*.d.ts` 中未出现 `bundle.installer`
 
@@ -149,7 +149,7 @@ bm install [-h] [-p path] [-u userId] [-r] [-w waitting-time]
 
 `bm` 的定位是调试工具，文档明确要求“先获取 hdc，再 `hdc shell` 运行”。
 
-宿主机 hdc 4.1 工具帮助（`D:\ohos-tools\sdk\openharmony-4.1-Release\toolchains\hdc.exe help`）：
+宿主机 hdc 4.1 工具帮助（`$OHOS_TOOLS/sdk/openharmony-4.1-Release/toolchains/hdc.exe help`）：
 
 ```text
 file send [option] local remote       - Send file to device
@@ -454,25 +454,25 @@ d.ts：
 
 ### 6.1 SDK / 源码
 
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.multimedia.media.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.multimedia.media.d.ts`
   - `interface AVFileDescriptor`、`AVPlayer.fdSrc`、`AVPlayer.url`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.multimedia.mediaLibrary.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.multimedia.mediaLibrary.d.ts`
   - `namespace mediaLibrary`（`@deprecated since 9`）、`getMediaLibrary(context)`、`MediaLibrary.getFileAssets`、`FileAsset.open`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.file.photoAccessHelper.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.file.photoAccessHelper.d.ts`
   - `getPhotoAccessHelper`、`PhotoAccessHelper.getAssets`、`class PhotoViewPicker`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.file.picker.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.file.picker.d.ts`
   - `AudioViewPicker`、`DocumentViewPicker`、`DocumentSelectOptions`、`DocumentSelectMode`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.multimedia.avsession.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.multimedia.avsession.d.ts`
   - `createAVSession`、`setAVMetadata`、`setAVPlaybackState`、`activate`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.resourceschedule.backgroundTaskManager.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.resourceschedule.backgroundTaskManager.d.ts`
   - `startBackgroundRunning`、`BackgroundMode.AUDIO_PLAYBACK`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.fileshare.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.fileshare.d.ts`
   - `persistPermission`、`activatePermission`，`@permission FILE_ACCESS_PERSIST`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.app.ability.wantConstant.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.app.ability.wantConstant.d.ts`
   - `FLAG_INSTALL_ON_DEMAND`
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\ets\api\@ohos.ability.wantConstant.d.ts`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/ets/api/@ohos.ability.wantConstant.d.ts`
   - 公开 action 常量列表（无 install）
-- `D:\ohos-tools\sdk\openharmony-4.1-Release\toolchains\hdc.exe help`
+- `$OHOS_TOOLS/sdk/openharmony-4.1-Release/toolchains/hdc.exe help`
   - `install [-r|-s] src`、`file send/recv`
 
 ### 6.2 官方 4.1 文档
